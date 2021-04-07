@@ -14,6 +14,7 @@ import ru.geekbrains.service.Util;
 @Controller
 @RequestMapping
 public class ProductController {
+
     private Util util;
     private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
 
