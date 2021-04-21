@@ -2,38 +2,46 @@ package ru.geekbrains.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import ru.geekbrains.persist.model.Product;
-import ru.geekbrains.service.Util;
+import org.springframework.web.bind.annotation.*;
+import ru.geekbrains.persist.repo.CategoryRepository;
+import ru.geekbrains.service.ProductService;
 
 @Controller
 @RequestMapping
 public class ProductController {
-    private Util util;
+
     private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
 
-    @Autowired
-    public ProductController(Util util) {
-        this.util = util;
+    private final CategoryRepository categoryRepository;
+
+    private final ProductService productService;
+
+    public ProductController(CategoryRepository categoryRepository, ProductService productService) {
+        this.categoryRepository = categoryRepository;
+        this.productService = productService;
     }
 
     @GetMapping
-    public String productListPage(Model model) {
+    public String productListPage(@RequestParam(value = "categoryId", required = false) Long categoryId,
+                                  @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
+                                  @RequestParam(value = "size", required = false, defaultValue = "6") Integer size,
+                                  Model model) {
         logger.info("Product list page");
-        model.addAttribute("productList", util.getAllProduct());
+
+        model.addAttribute("categories", categoryRepository.findAll());
+        model.addAttribute("products", productService.findByFilter(categoryId, page, size));
+
         return "categories-left-sidebar";
     }
 
-    @GetMapping("/product-details")
-    public String viewProductDetails(Model model, @RequestParam("id") Long id) {
-        Product product = util.findProductById(id);
-        logger.info("View product: " + product.getName());
-        model.addAttribute("product", product);
+    @GetMapping("/product/{id}")
+    public String productPage(@PathVariable("id") Long id, Model model) {
+        logger.info("Product page {}", id);
+
+        model.addAttribute("product", productService.findById(id).orElseThrow(NotFoundException::new));
+
         return "product-details";
     }
 }
