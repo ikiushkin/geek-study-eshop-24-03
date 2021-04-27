@@ -1,7 +1,6 @@
 package ru.geekbrains.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.geekbrains.persist.model.Picture;
@@ -23,9 +22,7 @@ public class PictureServiceBlobImpl implements PictureService {
 
     @Override
     public Optional<String> getPictureContentTypeById(long id) {
-        return repository.findById(id)
-                .filter(pic -> pic.getPictureData().getData() != null)
-                .map(Picture::getContentType);
+        return repository.getContentTypeForBlob(id);
     }
 
     @Override
