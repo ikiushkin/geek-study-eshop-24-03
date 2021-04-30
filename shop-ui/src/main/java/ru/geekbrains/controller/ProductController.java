@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.geekbrains.persist.repo.CategoryRepository;
 import ru.geekbrains.service.ProductService;
 
-@Controller
+@RestController
 @RequestMapping
 public class ProductController {
 
