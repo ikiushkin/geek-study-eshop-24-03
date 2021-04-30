@@ -14,7 +14,7 @@ import ru.geekbrains.service.model.LineItem;
 
 import java.util.Map;
 
-@Controller
+@RestController
 @RequestMapping("/cart")
 public class CartController {
 
