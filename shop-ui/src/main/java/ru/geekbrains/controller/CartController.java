@@ -10,7 +10,6 @@ import ru.geekbrains.controller.repr.CartItemRepr;
 import ru.geekbrains.controller.repr.ProductRepr;
 import ru.geekbrains.service.CartService;
 import ru.geekbrains.service.ProductService;
-import ru.geekbrains.service.model.LineItem;
 
 import java.util.Map;
 
@@ -33,7 +32,6 @@ public class CartController {
     @GetMapping
     public String mainPage(Model model) {
         model.addAttribute("lineItems", cartService.getLineItems());
-        model.addAttribute("totalPrice", cartService.getTotalPrice());
         return "shopping-cart";
     }
 
@@ -46,20 +44,15 @@ public class CartController {
     }
 
     @PostMapping(path = "/update_all_qty")
-    public String updateAllQty(@RequestParam Map<String, String> productQtyMap) {
-        logger.info("Product Qty Map: {}", productQtyMap);
-
-        cartService.updateAllQty(productQtyMap);
-
+    public String updateAllQty(@RequestParam Map<Long, Integer> paramMap) {
+        logger.info("Product Qty Map: {}", paramMap);
+        cartService.updateAllQty(paramMap);
         return "redirect:/cart";
     }
 
-    @RequestMapping(value = "/delete", method = RequestMethod.GET)
-    public String removeFromCart(@RequestParam(name = "productId") Long productID) {
-        cartService.removeProductById(productID);
-        if (cartService.getLineItems().size() < 1) {
-            return "redirect:/";
-        }
+    @DeleteMapping
+    public String delete(@RequestParam("productId") Long productId) {
+        cartService.removeProduct(new ProductRepr(productId, null, null, null, null), "", "");
         return "redirect:/cart";
     }
 }

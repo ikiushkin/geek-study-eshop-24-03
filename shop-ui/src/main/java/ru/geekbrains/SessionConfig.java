@@ -7,7 +7,7 @@ import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSeriali
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 
-@Profile("!dev")
+@Profile("!dev & !test")
 @Configuration
 @EnableRedisHttpSession
 public class SessionConfig {

@@ -13,13 +13,11 @@ public interface CartService {
 
     void removeProductQty(ProductRepr productRepr, String color, String material, int qty);
 
+    void removeProduct(ProductRepr productRepr, String color, String material);
+
     List<LineItem> getLineItems();
 
-    void updateAllQty(Map<String, String > productIdQtyMap);
+    void updateAllQty(Map<Long, Integer> productIdQtyMap);
 
     BigDecimal getSubTotal();
-
-    void removeProductById(Long productID);
-
-    Integer getTotalPrice();
 }
