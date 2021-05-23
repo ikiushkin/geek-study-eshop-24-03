@@ -48,4 +48,5 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registry.setApplicationDestinationPrefixes("/chat_in");
         registry.enableSimpleBroker("/chat_out");
     }
+
 }

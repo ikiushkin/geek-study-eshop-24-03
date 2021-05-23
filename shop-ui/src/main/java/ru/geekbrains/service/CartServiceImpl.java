@@ -50,41 +50,20 @@ public class CartServiceImpl implements CartService, Serializable {
     }
 
     @Override
+    public void removeProduct(ProductRepr productRepr, String color, String material) {
+        LineItem lineItem = new LineItem(productRepr, color, material);
+        lineItems.remove(lineItem);
+    }
+
+    @Override
     public List<LineItem> getLineItems() {
         lineItems.forEach(LineItem::setQty);
         return new ArrayList<>(lineItems.keySet());
     }
 
     @Override
-    public Integer getTotalPrice() {
-        int totalSum = 0;
-        for (Map.Entry<LineItem, Integer> entry : lineItems.entrySet()) {
-            int price = entry.getKey().getProductRepr().getPrice().intValue();
-            int qty = entry.getValue();
-
-            totalSum +=  price * qty;
-        }
-        return totalSum;
-    }
-
-    @Override
-    public void updateAllQty(Map<String, String> productQtyMap) {
-        long productID;
-        int newQty;
-
-        if (productQtyMap.size() > 0) {
-            for(Map.Entry<String, String> newMap : productQtyMap.entrySet()) {
-                productID = Long.parseLong(newMap.getKey());
-                newQty = Integer.parseInt(newMap.getValue());
-
-                for (Map.Entry<LineItem, Integer> oldMap : lineItems.entrySet()) {
-                    LineItem lineItem = oldMap.getKey();
-                    if (oldMap.getKey().getProductId().equals(productID)) {
-                        lineItems.put(lineItem, newQty);
-                    }
-                }
-            }
-        }
+    public void updateAllQty(Map<Long, Integer> productIdQtyMap) {
+        // TODO
     }
 
     @JsonIgnore
@@ -94,10 +73,5 @@ public class CartServiceImpl implements CartService, Serializable {
         return lineItems.keySet().stream()
                 .map(LineItem::getTotal)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
-    }
-
-    @Override
-    public void removeProductById(Long id) {
-        lineItems.keySet().removeIf(key -> key.getProductId().equals(id));
     }
 }

@@ -8,7 +8,7 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.4.4</version>
-        <relativePath/>
+        <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
     <groupId>ru.geekbrains</groupId>
@@ -38,6 +38,7 @@
         <module>shop-picture-service</module>
         <module>shop-admin-ui</module>
         <module>shop-ui</module>
+        <module>rabbit-mq-messanger</module>
     </modules>
 
 </project>
